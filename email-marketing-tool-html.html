@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Marketing Tool</title>
+  <link rel="stylesheet" href="/email-marketing-tool-css.css">
+</head>
+<body>
+
+  <div class="powered-by">
+    <img src="Aurjobs_Logo.jpg" alt="Aurjobs Logo" class="powered-logo">
+    <span>Powered by <strong>Aurjobs</strong></span>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Email Marketing Tool</h1>
+      <p>Send personalized emails to your contact list</p>
+    </header>
+
+    <div class="workflow-container">
+      <ul class="workflow-steps">
+        <li class="step active" id="step1">1. Upload Files</li>
+        <li class="step" id="step2">2. Configure</li>
+        <li class="step" id="step3">3. Personalize</li>
+        <li class="step" id="step4">4. Send</li>
+      </ul>
+    </div>
+
+    <!-- Step 1: Upload Files -->
+    <div class="step-content active" id="step1-content">
+      <div class="card">
+        <h2>Upload Your Data</h2>
+        
+        <div class="upload-section">
+          <h3>Excel File with Contacts</h3>
+          <div class="file-input">
+            <input type="file" id="excel-file" name="excel" accept=".xlsx, .xls">
+            <label for="excel-file" class="file-label">
+              <span class="file-icon">📊</span>
+              <span class="file-text">Choose Excel File</span>
+            </label>
+            <span class="file-name" id="excel-file-name"></span>
+          </div>
+          <p class="help-text">Upload an Excel file containing your contact list</p>
+          <div class="progress-bar" id="excel-progress">
+            <div class="progress"></div>
+          </div>
+          <button id="upload-excel-btn" class="btn" disabled>Upload Excel</button>
+          <div id="excel-preview-container" class="preview-container"></div>
+        </div>
+
+        <div class="upload-section">
+          <h3>Email Template</h3>
+          <div class="template-tabs">
+            <button class="tab-btn active" data-tab="upload">Upload HTML</button>
+            <button class="tab-btn" data-tab="paste">Paste HTML</button>
+          </div>
+          
+          <div class="tab-content active" id="upload-tab">
+            <div class="file-input">
+              <input type="file" id="template-file" name="template" accept=".html, .htm">
+              <label for="template-file" class="file-label">
+                <span class="file-icon">📝</span>
+                <span class="file-text">Choose HTML Template</span>
+              </label>
+              <span class="file-name" id="template-file-name"></span>
+            </div>
+            <div class="progress-bar" id="template-progress">
+              <div class="progress"></div>
+            </div>
+            <button id="upload-template-btn" class="btn" disabled>Upload Template</button>
+          </div>
+          
+          <div class="tab-content" id="paste-tab">
+            <textarea id="template-content" placeholder="Paste your HTML template here..."></textarea>
+            <button id="save-template-btn" class="btn">Save Template</button>
+          </div>
+          
+          <p class="help-text">Use placeholder tags like {{name}} in your template</p>
+          <div id="template-preview" class="template-preview"></div>
+        </div>
+
+        <div class="actions">
+          <button id="next-to-step2" class="btn btn-primary" disabled>Next: Configure</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Configure -->
+    <div class="step-content" id="step2-content">
+      <div class="card">
+        <h2>Configure Email Settings</h2>
+        
+        <div class="config-section">
+          <h3>SMTP Settings</h3>
+          <div class="form-group">
+            <label for="smtp-server">SMTP Server</label>
+            <input type="text" id="smtp-server" placeholder="e.g., smtp.gmail.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="smtp-port">SMTP Port</label>
+            <select id="smtp-port">
+              <option value="587">587 (TLS)</option>
+              <option value="465">465 (SSL)</option>
+              <option value="25">25 (Standard)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="email-user">Email Address</label>
+            <input type="email" id="email-user" placeholder="your@email.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="email-pass">Password/App Password</label>
+            <input type="password" id="email-pass" placeholder="Your password or app password">
+          </div>
+          
+          <div class="form-group">
+            <label for="sender-name">Sender Name</label>
+            <input type="text" id="sender-name" placeholder="Your Name or Company">
+          </div>
+          
+          <button id="test-connection" class="btn">Test Connection</button>
+          <div id="connection-status"></div>
+        </div>
+        
+        <div class="config-section">
+          <h3>Email Configuration</h3>
+          
+          <div class="form-group">
+            <label for="email-column">Email Column</label>
+            <select id="email-column">
+              <option value="">Select column containing emails</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="name-column">Name Column (optional)</label>
+            <select id="name-column">
+              <option value="">Select column containing names</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="subject-line">Email Subject Line</label>
+            <input type="text" id="subject-line" placeholder="Subject of your email">
+            <p class="help-text">You can use {{name}} to personalize the subject</p>
+          </div>
+        </div>
+        
+        <div class="actions">
+          <button id="back-to-step1" class="btn">Back</button>
+          <button id="next-to-step3" class="btn btn-primary" disabled>Next: Personalize</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Personalize -->
+    <div class="step-content" id="step3-content">
+      <div class="card">
+        <h2>Personalize Your Email</h2>
+        
+        <div class="personalization-section">
+          <h3>Map Data Fields to Template Variables</h3>
+          <p>Connect your Excel data columns to template placeholder variables</p>
+          
+          <div id="variable-mappings" class="variable-mappings">
+            <!-- Mapping fields will be added here -->
+          </div>
+          
+          <button id="add-variable" class="btn">Add Variable</button>
+        </div>
+        
+        <div class="preview-section">
+          <h3>Template Preview</h3>
+          <div id="email-preview" class="email-preview"></div>
+        </div>
+        
+        <div class="actions">
+          <button id="back-to-step2" class="btn">Back</button>
+          <button id="next-to-step4" class="btn btn-primary">Next: Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Send -->
+    <div class="step-content" id="step4-content">
+      <div class="card">
+        <h2>Review & Send</h2>
+        
+        <div class="review-section">
+          <h3>Sending Summary</h3>
+          <div class="info-panel">
+            <div class="info-item">
+              <span class="info-label">Recipients:</span>
+              <span id="recipient-count" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Template:</span>
+              <span id="template-name" class="info-value">Not selected</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email Column:</span>
+              <span id="email-column-name" class="info-value">Not selected</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Subject Line:</span>
+              <span id="subject-line-preview" class="info-value">Not set</span>
+            </div>
+          </div>
+          
+          <div class="alert warning">
+            <strong>Important:</strong> There is a limit of 500 emails per batch. Emails beyond this limit will not be sent.
+          </div>
+          
+          <button id="start-sending" class="btn btn-primary">Start Sending</button>
+        </div>
+        
+        <div id="sending-progress" class="sending-progress hidden">
+          <h3>Sending Progress</h3>
+          <div class="progress-container">
+            <div class="progress-bar" id="sending-progress-bar">
+              <div class="progress"></div>
+            </div>
+            <div class="progress-stats">
+              <span id="progress-count">0 / 0</span>
+              <span id="progress-percent">0%</span>
+            </div>
+          </div>
+          
+          <div class="stats-container">
+            <div class="stat-box">
+              <div class="stat-value" id="sent-count">0</div>
+              <div class="stat-label">Sent</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="failed-count">0</div>
+              <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="remaining-count">0</div>
+              <div class="stat-label">Remaining</div>
+            </div>
+          </div>
+          
+          <div class="log-container">
+            <h4>Sending Log</h4>
+            <div id="sending-log" class="sending-log"></div>
+          </div>
+        </div>
+        
+        <div id="sending-complete" class="sending-complete hidden">
+          <h3>Sending Complete</h3>
+          <div class="stats-container">
+            <div class="stat-box">
+              <div class="stat-value" id="final-sent-count">0</div>
+              <div class="stat-label">Sent</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="final-failed-count">0</div>
+              <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="final-total-count">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+          
+          <div class="actions">
+            <button id="start-over" class="btn btn-primary">Start New Campaign</button>
+          </div>
+        </div>
+
+        <!-- Add this button for stopping the email sending process -->
+  <div class="stop-container">
+    <button id="stop-sending" class="btn btn-danger">Stop Sending</button>
+  </div>
+
+<div class="form-group">
+  <label for="delay-between-emails">Delay Between Emails (ms)</label>
+  <select id="delay-between-emails">
+    <option value="1000">1 second</option>
+    <option value="2000" selected>2 seconds</option>
+    <option value="5000">5 seconds</option>
+    <option value="10000">10 seconds</option>
+  </select>
+  <p class="help-text">Higher values reduce the chance of being rate-limited</p>
+</div>
+        
+        <div class="actions">
+          <button id="back-to-step3" class="btn">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="email-marketing-tool-js.js"></script>
+</body>
+</html>
