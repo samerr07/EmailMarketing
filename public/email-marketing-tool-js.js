@@ -696,6 +696,18 @@ let checkStatusInterval = null;
   }
 }
 
+function stopSending() {
+  fetch('/stop-sending', { method: 'POST' })
+      .then(() => {
+          appendLog('⛔ Stop request sent to server.');
+      })
+      .catch((err) => {
+          appendLog('⚠️ Failed to send stop request.');
+          console.error(err);
+      });
+}
+
+
 // Add a function to stop sending
 function stopSendingEmails() {
   const jobId = state.currentJobId; // You'll need to save this when starting the job
