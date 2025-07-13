@@ -21,17 +21,18 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Install dependencies, build, and test (Server folder)
+      - name: Install dependencies and build (Server folder)
         working-directory: ./Server
         run: |
           npm install
           npm run build --if-present
-          # npm run test --if-present
 
       - name: Zip Server folder for deployment
-        run: zip -r release.zip ./Server
+        run: |
+          cd Server
+          zip -r ../release.zip .
 
-      - name: Upload artifact for deployment
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
@@ -45,7 +46,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
@@ -65,4 +66,4 @@ jobs:
         with:
           app-name: 'EmailAi'
           slot-name: 'Production'
-          package: ./Server
+          package: .
